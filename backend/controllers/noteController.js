@@ -1,6 +1,5 @@
 const asyncHandler = require("express-async-handler");
 
-const User = require("../models/userModels");
 const Note = require("../models/noteModel");
 const Ticket = require("../models/ticketModels");
 
@@ -8,14 +7,6 @@ const Ticket = require("../models/ticketModels");
 // get request /api/tickets/:ticketId/notes
 // @route private
 const getNotes = asyncHandler(async (req, res) => {
-  // get user using the id and jwt
-  const user = await user.findById(req.user.id);
-
-  if (!user) {
-    res.status(401);
-    throw new Error("User not found");
-  }
-
   const ticket = await Ticket.findById(req.params.ticketId);
 
   if (ticket.user.toString() !== req.user.id) {
@@ -27,18 +18,11 @@ const getNotes = asyncHandler(async (req, res) => {
 
   res.status(200).json(notes);
 });
+
 // / create  notes for a ticket
 // post request /api/tickets/:ticketId/notes
 // @route private
 const addNote = asyncHandler(async (req, res) => {
-  // get user using the id and jwt
-  const user = await user.findById(req.user.id);
-
-  if (!user) {
-    res.status(401);
-    throw new Error("User not found");
-  }
-
   const ticket = await Ticket.findById(req.params.ticketId);
 
   if (ticket.user.toString() !== req.user.id) {
@@ -58,6 +42,6 @@ const addNote = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
-  addNotes,
+  addNote,
   getNotes,
 };

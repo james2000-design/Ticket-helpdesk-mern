@@ -7,31 +7,27 @@ const Ticket = require("../models/ticketModels");
 // get request
 // @route private
 const getTickets = asyncHandler(async (req, res) => {
+  const tickets = await Ticket.find({ user: req.user.id });
+  if (!tickets) {
+    res.status(401);
+    throw new Error("User not found");
+  }
   // get user using the id and jwt
+
+  res.status(200).json(tickets);
   const user = await user.findById(req.user.id);
 
   if (!user) {
     res.status(401);
     throw new Error("User not found");
   }
-
-  const tickets = await Ticket.find({ user: req.user.id });
-
-  res.status(200).json(tickets);
 });
+
 // / Get  current user ticket
 // get request
 // @route private
 const getTicket = asyncHandler(async (req, res) => {
-  // get user using the id and jwt
-  const user = await user.findById(req.user.id);
-
-  if (!user) {
-    res.status(401);
-    throw new Error("User not found");
-  }
-
-  const ticket = await Ticket.findById(req.params.id);
+  const ticket = await user.findById(req.user.id);
 
   if (!ticket) {
     res.status(404);
@@ -43,6 +39,14 @@ const getTicket = asyncHandler(async (req, res) => {
   }
 
   res.status(200).json(ticket);
+
+  // get user using the id and jwt
+  const user = await User.findById(req.user.id);
+
+  if (!user) {
+    res.status(401);
+    throw new Error("User not found");
+  }
 });
 
 // / delete current user ticket
@@ -56,7 +60,6 @@ const deleteTicket = asyncHandler(async (req, res) => {
     res.status(401);
     throw new Error("User not found");
   }
-
   const ticket = await Ticket.findById(req.params.id);
 
   if (!ticket) {
@@ -73,12 +76,12 @@ const deleteTicket = asyncHandler(async (req, res) => {
   res.status(200).json({ sucess: true });
 });
 
-// / delete current user ticket
+// / Update current user ticket
 // get request
 // @route private
 const updateTicket = asyncHandler(async (req, res) => {
   // get user using the id and jwt
-  const user = await user.findById(req.user.id);
+  const user = await User.findById(req.user.id);
 
   if (!user) {
     res.status(401);
@@ -102,10 +105,10 @@ const updateTicket = asyncHandler(async (req, res) => {
     { new: true }
   );
 
-  res.status(200).json({ sucess: true });
+  res.status(200).json(updatedTicket);
 });
 
-// / Get  current user ticket
+// / create  current user ticket
 // post request
 // @route private
 const createTickets = asyncHandler(async (req, res) => {
@@ -115,23 +118,22 @@ const createTickets = asyncHandler(async (req, res) => {
     res.status(401);
     throw new Error("please add a product and description");
   }
-
-  // get user using the id and jwt
-  const user = await user.findById(req.user.id);
+  // Get user using the id and jwt
+  const user = await User.findById(req.user.id);
 
   if (!user) {
     res.status(401);
     throw new Error("User not found");
   }
-
-  const tickets = await Ticket.create({
+  const ticket = await Ticket.create({
     product,
     description,
     user: req.user.id,
     status: "new",
   });
 
-  res.status(201).json(tickets);
+  //
+  res.status(201).json(ticket);
 });
 
 module.exports = {

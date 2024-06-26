@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const asyncHandler = require("express-async-handler");
-const user = require("../models/userModels");
+const User = require("../models/userModels");
 
 const protect = asyncHandler(async (req, res, next) => {
   let token;
@@ -11,12 +11,17 @@ const protect = asyncHandler(async (req, res, next) => {
     try {
       // get token from header
 
-      token = req.headers.authorization.split("")[1];
+      token = req.headers.authorization.split(" ")[1];
       // verify token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
       // GET USER FROM TOKEN
-      req.user = user.findById(decoded.id).select("-password");
+      req.user = User.findById(decoded.id).select("-password");
+      if (!req.user) {
+        console.log(error);
+        res.status(402);
+        throw new Error("Not authorized");
+      }
       next();
     } catch (error) {
       console.log(error);
@@ -31,4 +36,4 @@ const protect = asyncHandler(async (req, res, next) => {
   }
 });
 
-module.exports = protect;
+module.exports = { protect };

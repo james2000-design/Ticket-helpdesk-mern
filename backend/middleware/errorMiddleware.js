@@ -1,6 +1,4 @@
-const { stack } = require("../routes/userRoute");
-
-const errorHandler = (err, req, res, next) => {
+const errorHandler = (err, _, res, next) => {
   const statusCode = res.statusCode ? res.statusCode : 500;
   res.statusCode(statusCode);
   res.json({

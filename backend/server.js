@@ -1,12 +1,7 @@
-const dotenv = require("dotenv").config();
-
+require("dotenv").config();
 const path = require("path");
 const express = require("express");
-const EventEmitter = require("events");
-const emitter = new EventEmitter();
-emitter.setMaxListeners(20);
-
-const colors = require("colors");
+require("colors");
 const connectDB = require("./config/db");
 
 // connect DB
