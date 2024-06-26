@@ -1,5 +1,6 @@
 const dotenv = require("dotenv").config();
 
+const path = require("path");
 const express = require("express");
 const EventEmitter = require("events");
 const emitter = new EventEmitter();
@@ -23,6 +24,21 @@ app.listen(PORT, () => console.log(`server has started on ${PORT}`));
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to the support desk API" });
 });
+
+// Serve Frontend
+if (process.env.NODE_ENV === "production") {
+  // Set build folder as static
+  app.use(express.static(path.join(__dirname, "../frontend/build")));
+
+  // FIX: below code fixes app crashing on refresh in deployment
+  app.get("*", (_, res) => {
+    res.sendFile(path.join(__dirname, "../frontend/build/index.html"));
+  });
+} else {
+  app.get("/", (_, res) => {
+    res.status(200).json({ message: "Welcome to the Support Desk API" });
+  });
+}
 
 app.use(errorHandler);
 
