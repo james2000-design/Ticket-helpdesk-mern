@@ -1,11 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getTicket, closeTicket } from "../features/ticket/ticketSlice";
-import {
-  getNotes,
-  createNotes,
-  reset as notesReset,
-} from "../features/notes/noteSlice";
+import { createNotes } from "../features/notes/noteSlice";
 import BackButton from "../components/BackButton";
 import Spinning from "../components/Spinning";
 import { useParams } from "react-router-dom";
@@ -58,8 +54,12 @@ function Ticket() {
   // Create note submit
   const onNoteSubmit = (e) => {
     e.preventDefault();
-    disptach(createNotes({ noteText, ticketId }));
-    onclose();
+    disptach(createNotes({ noteText, ticketId }))
+      .unwrap()
+      .then(() => {
+        setNoteText("");
+        closeModal();
+      });
   };
 
   const openModal = () => setModalIsOpen(true);
@@ -118,7 +118,7 @@ function Ticket() {
               onChange={(e) => setNoteText(e.target.value)}></textarea>
           </div>
           <div className="form-group">
-            <button className="btn" type="submit">
+            <button onClick={onNoteSubmit} className="btn" type="submit">
               Submit
             </button>
           </div>
