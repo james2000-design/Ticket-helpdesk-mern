@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { getTicket, reset } from "../features/ticket/ticketSlice";
+import { getTickets, reset } from "../features/ticket/ticketSlice";
 import Spinning from "../components/Spinning";
 import BackButton from "../components/BackButton";
 import TicketItem from "../components/TicketItem";
@@ -20,7 +20,7 @@ function Tickets() {
   }, [isSuccess, dispatch]);
 
   useEffect(() => {
-    dispatch(getTicket());
+    dispatch(getTickets());
   }, [dispatch]);
 
   if (isLoading) {

@@ -38,7 +38,6 @@ function Ticket() {
     (state) => state.notes
   );
   const navigate = useNavigate();
-  const params = useParams();
   const disptach = useDispatch();
   const { ticketId } = useParams();
 
@@ -77,7 +76,7 @@ function Ticket() {
       <header className="ticket-header">
         <BackButton />
         <h2>
-          Ticket ID: {ticket._id}
+          Ticket ID: {ticket.id}
           <span className={`status,status-${ticket.staus}`}>
             {ticket.status}
           </span>

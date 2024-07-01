@@ -24,7 +24,7 @@ function TicketCard() {
     }
     if (isSuccess) {
       dispatch(reset());
-      navigate("/ticket");
+      navigate("/tickets");
     }
   }, [isError, isSuccess, dispatch, navigate, message]);
 
@@ -61,7 +61,7 @@ function TicketCard() {
               onChange={(e) => setProduct(e.target.value)}>
               <option value="iPhone">iPhone</option>
               <option value="Macbook Pr">Macbook Pro</option>
-              <option value="iMac">Imac</option>
+              <option value="iMac">iMac</option>
               <option value="iPad">iPad</option>
             </select>
           </div>
@@ -75,7 +75,9 @@ function TicketCard() {
               value={description}
               onChange={(e) => setDescription(e.target.value)}></textarea>
           </div>
-          <button className="btn btn-block">Submit</button>
+          <button className="btn btn-block" onClick={onSubmit}>
+            Submit
+          </button>
         </form>
       </section>
     </>

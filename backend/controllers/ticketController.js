@@ -12,23 +12,15 @@ const getTickets = asyncHandler(async (req, res) => {
     res.status(401);
     throw new Error("User not found");
   }
-  // get user using the id and jwt
-
   res.status(200).json(tickets);
-  const user = await user.findById(req.user.id);
-
-  if (!user) {
-    res.status(401);
-    throw new Error("User not found");
-  }
 });
 
 // / Get  current user ticket
 // get request
 // @route private
 const getTicket = asyncHandler(async (req, res) => {
-  const ticket = await user.findById(req.user.id);
-
+  const ticket = await Ticket.findById(req.params.id);
+  console.log("This is the ticket", ticket);
   if (!ticket) {
     res.status(404);
     throw new Error("Ticket not found");
@@ -39,14 +31,6 @@ const getTicket = asyncHandler(async (req, res) => {
   }
 
   res.status(200).json(ticket);
-
-  // get user using the id and jwt
-  const user = await User.findById(req.user.id);
-
-  if (!user) {
-    res.status(401);
-    throw new Error("User not found");
-  }
 });
 
 // / delete current user ticket
@@ -54,7 +38,7 @@ const getTicket = asyncHandler(async (req, res) => {
 // @route private
 const deleteTicket = asyncHandler(async (req, res) => {
   // get user using the id and jwt
-  const user = await user.findById(req.user.id);
+  const user = await User.findById(req.user.id);
 
   if (!user) {
     res.status(401);
