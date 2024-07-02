@@ -17,7 +17,7 @@ const getNotes = async (ticketId, token) => {
 
 // CREATE tickets Notes
 
-const createNotes = async (noteText, ticketId, token) => {
+const createNote = async (noteText, ticketId, token) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -35,6 +35,6 @@ const createNotes = async (noteText, ticketId, token) => {
 
 const noteService = {
   getNotes,
-  createNotes,
+  createNote,
 };
 export default noteService;

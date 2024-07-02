@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getTicket, closeTicket } from "../features/ticket/ticketSlice";
-import { createNotes } from "../features/notes/noteSlice";
+import { createNotes, getNotes } from "../features/notes/noteSlice";
 import BackButton from "../components/BackButton";
 import Spinning from "../components/Spinning";
 import { useParams } from "react-router-dom";
@@ -42,6 +42,7 @@ function Ticket() {
       toast.error(message);
     }
     disptach(getTicket(ticketId));
+    disptach(getNotes(ticketId));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isError, ticketId, message]);
 
@@ -59,7 +60,8 @@ function Ticket() {
       .then(() => {
         setNoteText("");
         closeModal();
-      });
+      })
+      .catch(toast.error);
   };
 
   const openModal = () => setModalIsOpen(true);
@@ -74,12 +76,10 @@ function Ticket() {
   return (
     <div className="ticket-page">
       <header className="ticket-header">
-        <BackButton />
+        <BackButton url={"/tickets"} />
         <h2>
           Ticket ID: {ticket.id}
-          <span className={`status,status-${ticket.staus}`}>
-            {ticket.status}
-          </span>
+          <span className={` status-${ticket.staus}`}>{ticket.status}</span>
         </h2>
         <h3>
           Date submited: {new Date(ticket.createdAt).toLocaleString("en-US")}
@@ -124,12 +124,15 @@ function Ticket() {
           </div>
         </form>
       </Modal>
-      {notes.map((note) => (
-        <NoteItem key={note._id} note={note} />
-      ))}
+      {notes ? (
+        notes.map((note) => <NoteItem key={note._id} note={note} />)
+      ) : (
+        <Spinning />
+      )}
+
       {ticket.status !== "closed" && (
         <button onClick={onTicketClose} className="btn btn-block btn-danger">
-          Close
+          Close Ticket
         </button>
       )}
     </div>

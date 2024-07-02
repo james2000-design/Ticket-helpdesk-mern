@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import noteService from "../notes/noteService";
+import { extractErrorMessage } from "../../utils";
 
 const initialState = {
-  notes: [],
+  notes: null,
   isError: false,
   isLoading: false,
   isSuccess: false,
@@ -18,14 +19,7 @@ export const getNotes = createAsyncThunk(
       const token = thunkAPI.getState().auth.user.token;
       return await noteService.getNotes(ticketId, token);
     } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.meassage ||
-        error.toString();
-
-      return thunkAPI.rejectWithValue(message);
+      return thunkAPI.rejectWithValue(extractErrorMessage(error));
     }
   }
 );
@@ -35,16 +29,9 @@ export const createNotes = createAsyncThunk(
   async ({ noteText, ticketId }, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
-      return await noteService.createNotes(noteText, ticketId, token);
+      return await noteService.createNote(noteText, ticketId, token);
     } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.meassage ||
-        error.toString();
-
-      return thunkAPI.rejectWithValue(message);
+      return thunkAPI.rejectWithValue(extractErrorMessage(error));
     }
   }
 );
@@ -52,9 +39,7 @@ export const createNotes = createAsyncThunk(
 export const noteSlice = createSlice({
   name: "note",
   initialState,
-  reducers: {
-    reset: (state) => initialState,
-  },
+
   extraReducers: (builder) => {
     builder
       .addCase(getNotes.pending, (state) => {
