@@ -79,7 +79,9 @@ function Ticket() {
         <BackButton url={"/tickets"} />
         <h2>
           Ticket ID: {ticket.id}
-          <span className={` status-${ticket.staus}`}>{ticket.status}</span>
+          <span className={`status status-${ticket.status}`}>
+            {ticket.status}
+          </span>
         </h2>
         <h3>
           Date submited: {new Date(ticket.createdAt).toLocaleString("en-US")}
