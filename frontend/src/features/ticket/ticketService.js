@@ -33,6 +33,7 @@ const getTickets = async (token) => {
   };
 
   const response = await axios.get(API_URL, config);
+  console.log("this is the tickets", response.data);
 
   return response.data;
 };

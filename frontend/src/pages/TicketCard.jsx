@@ -60,7 +60,7 @@ function TicketCard() {
               value={product}
               onChange={(e) => setProduct(e.target.value)}>
               <option value="iPhone">iPhone</option>
-              <option value="Macbook Pr">Macbook Pro</option>
+              <option value="macbook_Pro">Macbook Pro</option>
               <option value="iMac">iMac</option>
               <option value="iPad">iPad</option>
             </select>
